@@ -1,5 +1,5 @@
 global start
-extern long_mode_start
+extern long_mode_init
 
 section .text
 bits 32
@@ -16,15 +16,10 @@ start:
     ; load the 64-bit GDT
     lgdt [gdt64.pointer]
 
-	mov ch, 0x2f
-	mov ebx, crispOS_str
+    ; jump to 64-bit
+    jmp gdt64.code:long_mode_init
 
-    ; print `crispOS` to screen
-	call output_text
 
-    hlt
-
-crispOS_str db 'crispOS', 0
 error_str   db 'Error:'
 error_code  db '0', 0
 
@@ -168,6 +163,7 @@ enable_paging:
 section .rodata
 gdt64:
     dq 0 ; zero entry
+.code: equ $ - gdt64
     dq (1<<43) | (1<<44) | (1<<47) | (1<<53) ; code segment
 .pointer:
     dw $ - gdt64 - 1
