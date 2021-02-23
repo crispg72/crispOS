@@ -14,3 +14,9 @@ With any luck this will create a bootable iso at `./build/x86_64/os-x86_64.iso`
 ## Running under qemu
 
 `make run` should run the iso using qemu.
+
+## Writing the iso to usb
+
+`dd if=os-x86_64.iso of=/dev/sdX bs=512 count=131072`
+
+Should work - be very careful to replace /dev/sdX with the value for your usb stick
